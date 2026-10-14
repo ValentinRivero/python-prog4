@@ -9,7 +9,6 @@ from .repositories import TaskRepository
 class TaskService:
     @staticmethod
     def mark_completed(task: Task) -> Task:
-    # Misma regla de negocio que TaskSerializer.validate (Clase 4)
         if not task.due_date:
             raise ValidationError(
                 "No se puede marcar una tarea como completada sin fecha límite registrada."

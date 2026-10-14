@@ -1,8 +1,7 @@
 from datetime import date
-from rest_framework import serializers
 from .models import Project, Task, Tag
 from .services import HolidayService
-
+from rest_framework import serializers
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
@@ -84,4 +83,3 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ["id", "name", "description", "tasks", "created_at"]
-
