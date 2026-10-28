@@ -1,12 +1,20 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
- 
+from channels.db import database_sync_to_async
+from .models import Project
  
 class TaskNotificationConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.project_id = self.scope["url_route"]["kwargs"]["project_id"]
         self.group_name = f"project_{self.project_id}"
- 
+
+        existe = await database_sync_to_async(Project.objects.filter(id=self.project_id).exists)()
+
+        if not existe:
+            # Si el proyecto no existe en la base, rechazamos la conexión y terminamos
+            await self.close()
+            return
+        
         # Nos unimos a un "grupo" (lo profundizamos en la Clase 10)
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
