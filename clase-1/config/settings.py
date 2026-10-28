@@ -29,12 +29,13 @@ load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -220,5 +221,14 @@ LOGGING = {
     },
     "loggers": {
         "security": {"handlers": ["file"], "level": "WARNING"},
+    },
+}
+
+INSTALLED_APPS += ["channels"]
+ASGI_APPLICATION = "config.asgi.application"
+ 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
     },
 }
