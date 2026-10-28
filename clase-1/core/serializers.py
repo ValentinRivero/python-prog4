@@ -1,3 +1,4 @@
+import nh3
 from datetime import date
 from .models import Project, Task, Tag
 from .services import HolidayService
@@ -70,7 +71,9 @@ class TaskSerializer(serializers.ModelSerializer):
                 )
             
         return data
-
+    
+    def validate_description(self, value):
+        return nh3.clean(value, tags=set())
     
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
